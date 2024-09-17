@@ -1,0 +1,39 @@
+#cloud-config
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+# WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+# COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+# OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+# Ubuntu Server 22.04 LTS
+autoinstall:
+  version: 1
+  apt:
+    geoip: true
+    disable_components: []
+    preserve_sources_list: false
+    primary:
+      - arches: [amd64, i386]
+        uri: http://us.archive.ubuntu.com/ubuntu
+      - arches: [default]
+        uri: http://ports.ubuntu.com/ubuntu-ports
+  early-commands:
+    - sudo systemctl stop ssh
+  locale: en_US
+  keyboard:
+    layout: us
+  identity:
+    hostname: jammy64
+    username: vagrant
+    password: $6$4h8yeHWAwwgdq$HHITacJKXev6GHjkw5a33d2k0HX2pMMdyzo.ok22eqwCiJLwPNp/sB565yM45pMmhXoVkpi5SIOK6QRCyS4iE.
+  ssh:
+    install-server: true
+    allow-pw: true
+  packages:
+    - openssh-server
+    - cloud-init
+  user-data:
+    disable_root: false
+    timezone: UTC
+  late-commands:
+    - echo "%vagrant ALL=NOPASSWD:ALL" > /etc/sudoers.d/vagrant
+    - chmod 0440 /etc/sudoers.d/vagrant
